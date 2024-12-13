@@ -1,11 +1,11 @@
 [theme]
 base="light"
 primaryColor="#07e99d"
-backgroundColor="#FFFFFF"
+backgroundColor="#faefe0"
 secondaryBackgroundColor="#fadbe6"
 textColor="#000000"
 font="sans serif"
 
 
 [server]
-runOnSave = false
+runOnSave = True
