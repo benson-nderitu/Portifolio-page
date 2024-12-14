@@ -11,7 +11,7 @@ from skills import strml
 
 st.set_page_config(
     page_title="Benson Nderitu",
-    page_icon="B",
+    page_icon=":material/bar_chart:",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -26,20 +26,11 @@ st.markdown(
         <style>
         .st-emotion-cache-1jicfl2 {
         width: 100%;
-        padding: 1rem 1rem 10rem;
+        padding: 1.8rem 1rem 10rem;
         min-width: auto;
         max-width: initial;
         }
             """,
-    unsafe_allow_html=True,
-)
-# -----------REMOVE GAP BETWEEN HEADER AND CONTENT ----------------
-st.markdown(
-    """
-    <style>
-    
-    </style>
-    """,
     unsafe_allow_html=True,
 )
 
@@ -55,6 +46,7 @@ load_css(css_path)
 
 
 # ================================================================
+@st.fragment()
 def main():
     tabs = sac.tabs(
         [
@@ -63,13 +55,17 @@ def main():
             sac.TabsItem(label="Skills", icon="rocket"),
         ],
         align="center",
-        size="md",
+        size="lg",
         variant="outline",
     )
 
     if tabs == "About Me":
         with st.container(key="about"):
-            st.write("About me")
+            ctacol, imagecol = st.columns([1, 1])
+            with ctacol:
+                st.write("About me")
+            with imagecol:
+                st.image("static/logo.png", width=300)
     elif tabs == "Portfolio":
 
         @st.cache_data()
@@ -77,10 +73,11 @@ def main():
             return [
                 {
                     "projectId": 1,
-                    "projectTitle": "Project One",
+                    "projectTitle": "Ultimate Personal Budgeting",
                     "images": [
-                        "static/project_images/1.png",
-                        "static/project_images/2.png",
+                        "static/images/1.png",
+                        "static/images/2.png",
+                        "static/images/3.png",
                     ],
                     "projectDescription": "This is the description for Project One.",
                     "publishDate": "2023-12-10",
@@ -90,8 +87,9 @@ def main():
                     "projectId": 2,
                     "projectTitle": "Project Two",
                     "images": [
-                        "static/project_images/1.png",
-                        "static/project_images/2.png",
+                        "static/images/1.png",
+                        "static/images/2.png",
+                        "static/images/3.png",
                     ],
                     "projectDescription": "This is the description for Project Two.",
                     "publishDate": "2023-11-20",
@@ -101,10 +99,47 @@ def main():
                     "projectId": 3,
                     "projectTitle": "Project Three",
                     "images": [
-                        "static/project_images/1.png",
-                        "static/project_images/2.png",
+                        "static/images/1.png",
+                        "static/images/2.png",
+                        "static/images/3.png",
                     ],
                     "projectDescription": "This is the description for Project Three.",
+                    "publishDate": "2023-10-05",
+                    "updateDate": "2023-10-10",
+                },
+                {
+                    "projectId": 4,
+                    "projectTitle": "Project Four",
+                    "images": [
+                        # "static/images/6.png",
+                        "static/images/6.svg",
+                        "static/images/7.svg",
+                    ],
+                    "projectDescription": "This is the description for Project Four.",
+                    "publishDate": "2023-10-05",
+                    "updateDate": "2023-10-10",
+                },
+                {
+                    "projectId": 5,
+                    "projectTitle": "Project Five",
+                    "images": [
+                        "static/images/1.png",
+                        "static/images/2.png",
+                        "static/images/3.png",
+                    ],
+                    "projectDescription": "This is the description for Project Five.",
+                    "publishDate": "2023-10-05",
+                    "updateDate": "2023-10-10",
+                },
+                {
+                    "projectId": 6,
+                    "projectTitle": "Project Six",
+                    "images": [
+                        "static/images/1.png",
+                        "static/images/2.png",
+                        "static/images/3.png",
+                    ],
+                    "projectDescription": "This is the description for Project Six.",
                     "publishDate": "2023-10-05",
                     "updateDate": "2023-10-10",
                 },
@@ -112,7 +147,6 @@ def main():
 
         @st.fragment
         def carousel_with_autoslide(project):
-            # Display carousel content
             with st.container(border=True):
                 slides = [{"image": img} for img in project["images"]]
                 description = project["projectDescription"]
@@ -123,7 +157,7 @@ def main():
                 carousel_key = f"carousel_index_{project['projectId']}"
                 if carousel_key not in st.session_state:
                     st.session_state[carousel_key] = 0
-                    st.session_state[f"last_update_time_{project['projectId']}"]
+
                 # Header Title
                 st.subheader(project["projectTitle"])
 
@@ -138,23 +172,25 @@ def main():
                         key=f"prev_button_{project['projectId']}",
                         icon=":material/arrow_back_ios:",
                     ):
-                        st.session_state.carousel_index = (
-                            st.session_state.carousel_index - 1
+                        # Navigate to the previous slide
+                        st.session_state[carousel_key] = (
+                            st.session_state[carousel_key] - 1
                         ) % len(slides)
                 with col2:
+                    # Display current slide number
                     st.markdown(
-                        f"<div style='text-align: center;'>{st.session_state.carousel_index + 1}/{len(slides)}</div>",
+                        f"<div style='text-align: center;'>{st.session_state[carousel_key] + 1}/{len(slides)}</div>",
                         unsafe_allow_html=True,
                     )
-
                 with col3:
                     if st.button(
                         label="",
                         key=f"next_button_{project['projectId']}",
                         icon=":material/arrow_forward_ios:",
                     ):
-                        st.session_state.carousel_index = (
-                            st.session_state.carousel_index + 1
+                        # Navigate to the next slide
+                        st.session_state[carousel_key] = (
+                            st.session_state[carousel_key] + 1
                         ) % len(slides)
 
                 # Get the current slide based on the index
@@ -163,6 +199,7 @@ def main():
 
                 # Description and dates
                 st.write(description)
+
                 # Two columns with buttons to direct to another page
                 pbldate, lupdte = st.columns(2, vertical_alignment="bottom")
                 with pbldate:
@@ -170,7 +207,6 @@ def main():
                         f"Published: <span style='font-weight: bold;'>{publish_date}</span>",
                         unsafe_allow_html=True,
                     )
-
                 with lupdte:
                     st.write(
                         f"Last Updated: <span style='font-weight: bold;'>{last_updated}</span>",
@@ -178,51 +214,147 @@ def main():
                     )
 
                 detailcol, ratecol, vwrtcol = st.columns(
-                    [3, 2, 1], vertical_alignment="center"
+                    [2, 1.5, 1.5], vertical_alignment="center"
                 )
                 with detailcol:
                     if st.button(
-                        label="More Details",
+                        label="Read More",
                         key=f"details_{project['projectId']}",
                         type="primary",
                         icon=":material/call_made:",
                     ):
                         st.write("Redirecting to more details page...")
-                        # Add navigation logic here
                 with ratecol:
-                    # Button to rate the project
                     if st.button(
-                        label="Rate this Project",
-                        icon=":material/star:",
+                        label="Rate",
+                        icon=":material/thumb_up_alt:",
                         key=f"rate_{project['projectId']}",
                     ):
                         st.write("Thank you for rating this project!")
                 with vwrtcol:
-                    # Display stars
                     stars = "⭐"
-                    # st.write(stars, f"{project['projectId']}.9/5 (200)")
                     st.write(stars, "4.9/5 (200)")
-                # Auto-slide functionality
-            # current_time = time.time()
-            if (
-                # current_time
-                -st.session_state[f"last_update_time_{project['projectId']}"]
-                > 5
-            ):
-                st.session_state[carousel_key] = (
-                    st.session_state[carousel_key] + 1
-                ) % len(slides)
-                st.session_state[f"last_update_time_{project['projectId']}"] = (
-                    # current_time
-                )
-                st.rerun()
 
-        # generate & Display projects cards in columns
+        # Generate & Display projects cards in columns
         project_cards = get_project_cards()
-        cols = st.columns(3)  
+        cols = st.columns(3)
         for i, project in enumerate(project_cards):
             with cols[i % 3]:  # Cycle through columns for each project
                 carousel_with_autoslide(project)
+
+        # @st.fragment()
+        # def carousel_with_autoslide(project):
+        #     # Display carousel content
+        #     with st.container(border=True):
+        #         slides = [{"image": img} for img in project["images"]]
+        #         description = project["projectDescription"]
+        #         publish_date = project["publishDate"]
+        #         last_updated = project["updateDate"]
+
+        #         # Initialize session state for carousel index
+        #         carousel_key = f"carousel_index_{project['projectId']}"
+        #         if carousel_key not in st.session_state:
+        #             st.session_state[carousel_key] = 0
+        #             st.session_state[f"last_update_time_{project['projectId']}"]
+        #         # Header Title
+        #         st.subheader(project["projectTitle"])
+
+        #         # Image container
+        #         image_container = st.empty()
+
+        #         # Navigation buttons for the carousel
+        #         col1, col2, col3 = st.columns([1, 6, 1], vertical_alignment="center")
+        #         with col1:
+        #             if st.button(
+        #                 label="",
+        #                 key=f"prev_button_{project['projectId']}",
+        #                 icon=":material/arrow_back_ios:",
+        #             ):
+        #                 st.session_state.carousel_index = (
+        #                     st.session_state.carousel_index - 1
+        #                 ) % len(slides)
+        #         with col2:
+        #             st.markdown(
+        #                 f"<div style='text-align: center;'>{st.session_state.carousel_index + 1}/{len(slides)}</div>",
+        #                 unsafe_allow_html=True,
+        #             )
+
+        #         with col3:
+        #             if st.button(
+        #                 label="",
+        #                 key=f"next_button_{project['projectId']}",
+        #                 icon=":material/arrow_forward_ios:",
+        #             ):
+        #                 st.session_state.carousel_index = (
+        #                     st.session_state.carousel_index + 1
+        #                 ) % len(slides)
+
+        #         # Get the current slide based on the index
+        #         current_slide = slides[st.session_state[carousel_key]]
+        #         image_container.image(current_slide["image"], use_container_width=True)
+
+        #         # Description and dates
+        #         st.write(description)
+        #         # Two columns with buttons to direct to another page
+        #         pbldate, lupdte = st.columns(2, vertical_alignment="bottom")
+        #         with pbldate:
+        #             st.write(
+        #                 f"Published: <span style='font-weight: bold;'>{publish_date}</span>",
+        #                 unsafe_allow_html=True,
+        #             )
+
+        #         with lupdte:
+        #             st.write(
+        #                 f"Last Updated: <span style='font-weight: bold;'>{last_updated}</span>",
+        #                 unsafe_allow_html=True,
+        #             )
+
+        #         detailcol, ratecol, vwrtcol = st.columns(
+        #             [3, 2, 1], vertical_alignment="center"
+        #         )
+        #         with detailcol:
+        #             if st.button(
+        #                 label="More Details",
+        #                 key=f"details_{project['projectId']}",
+        #                 type="primary",
+        #                 icon=":material/call_made:",
+        #             ):
+        #                 st.write("Redirecting to more details page...")
+        #                 # Add navigation logic here
+        #         with ratecol:
+        #             # Button to rate the project
+        #             if st.button(
+        #                 label="Rate this Project",
+        #                 icon=":material/star:",
+        #                 key=f"rate_{project['projectId']}",
+        #             ):
+        #                 st.write("Thank you for rating this project!")
+        #         with vwrtcol:
+        #             # Display stars
+        #             stars = "⭐"
+        #             # st.write(stars, f"{project['projectId']}.9/5 (200)")
+        #             st.write(stars, "4.9/5 (200)")
+        #         # Auto-slide functionality
+        #     # current_time = time.time()
+        #     if (
+        #         # current_time
+        #         -st.session_state[f"last_update_time_{project['projectId']}"]
+        #         > 5
+        #     ):
+        #         st.session_state[carousel_key] = (
+        #             st.session_state[carousel_key] + 1
+        #         ) % len(slides)
+        #         st.session_state[f"last_update_time_{project['projectId']}"] = (
+        #             # current_time
+        #         )
+        #         st.rerun()
+
+        # # generate & Display projects cards in columns
+        # project_cards = get_project_cards()
+        # cols = st.columns(3)
+        # for i, project in enumerate(project_cards):
+        #     with cols[i % 3]:  # Cycle through columns for each project
+        #         carousel_with_autoslide(project)
 
     elif tabs == "Skills":
         strml()

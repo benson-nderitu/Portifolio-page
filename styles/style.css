@@ -1,4 +1,6 @@
-.st-key-project_carousel {
-    padding: none;
-    margin: none;
+.st-key-about {
+    /* border: 1px solid rgba(49, 51, 63, 0.2); */
+    border-radius: 0.5rem;
+    padding: calc(1em - 1px);
+    min-height: 400px;
 }
