@@ -4,6 +4,8 @@ import pathlib
 import pages as pg
 import streamlit as st
 import streamlit_antd_components as sac
+from pathlib import Path
+
 from portifolio import show_home
 
 # from about import show_about
@@ -33,16 +35,26 @@ st.markdown(
             """,
     unsafe_allow_html=True,
 )
+# --- PATH SETTINGS ---
+current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+css_file = current_dir / "styles" / "style.css"
+# resume_file = current_dir / "static" / "CV.pdf"
 
+
+# --- LOAD CSS, PDF  ---
+with open(css_file) as f:
+    st.markdown("<style>{}</style>".format(f.read()), unsafe_allow_html=True)
+# with open(resume_file, "rb") as pdf_file:
+#     PDFbyte = pdf_file.read()
 
 # -------------------Load the external CSS file ------------------
-def load_css(file_path):
-    with open(file_path) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+# def load_css(file_path):
+#     with open(file_path) as f:
+#         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
-css_path = pathlib.Path("styles/style.css")
-load_css(css_path)
+# css_path = pathlib.Path("styles/style.css")
+# load_css(css_path)
 
 
 # ================================================================
@@ -60,12 +72,46 @@ def main():
     )
 
     if tabs == "About Me":
-        with st.container(key="about"):
-            ctacol, imagecol = st.columns([1, 1])
-            with ctacol:
-                st.write("About me")
-            with imagecol:
-                st.image("static/logo.png", width=300)
+        # --- HERO SECTION ---
+        with st.container(key="heroContainer"):
+            NAME = "John Doe"
+            DESCRIPTION = """
+            Senior Data Analyst, assisting enterprises by supporting data-driven decision-making.
+            """
+            col1, col2 = st.columns(2, gap="small")
+            with col1:
+                with st.container(key="CTAContainer"):
+                    st.title(NAME)
+                    st.write(DESCRIPTION)
+                    st.write("Here's my resume:")
+                    viewcol, downloadcol = st.columns(2)
+                    with viewcol:
+                        if st.button(
+                            label="Read Resume",
+                            icon=":material/open_in_new:",
+                            type="primary",
+                        ):
+                            st.write("View Resume")
+                    with downloadcol:
+                        if st.button(
+                            label="Download Resume",
+                            icon=":material/download:",
+                            key="download_resume",
+                            type="primary",
+                        ):
+                            st.write("Downloading...")
+                    # st.download_button(
+                    #     label=" 📄 Download Resume",
+                    #     data=PDFbyte,
+                    #     file_name=resume_file.name,
+                    #     mime="application/octet-stream",
+                    # )
+
+            with col2:
+                with st.container(key="profileImageContainer"):
+                    st.image("static/profile.png", use_container_width=True)
+        with st.container(border=True):
+            st.write("About me")
     elif tabs == "Portfolio":
 
         @st.cache_data()

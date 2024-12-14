@@ -1,6 +1,28 @@
-.st-key-about {
-    /* border: 1px solid rgba(49, 51, 63, 0.2); */
-    border-radius: 0.5rem;
-    padding: calc(1em - 1px);
-    min-height: 400px;
+.st-key-heroContainer {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .st-key-heroContainer {
+        margin-bottom: 0px !important;
+    }
+}
+
+.st-key-CTAContainer {
+    margin-left: 50px;
+    margin-top: 200px;
+}
+
+.st-key-profileImageContainer {
+    margin-left: 50px;
+}
+
+@media (max-width: 600px) {
+
+    .st-key-CTAContainer,
+    .st-key-profileImageContainer {
+        margin-left: 0px !important;
+        margin-top: 0px !important;
+    }
+
 }
